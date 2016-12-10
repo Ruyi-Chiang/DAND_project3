@@ -1,2 +1,4 @@
 *.osm
 *.bz2
+*.csv
+*.gsheet
