@@ -202,15 +202,11 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Problems-Encountered-in-the-Map">Problems Encountered in the Map<a class="anchor-link" href="#Problems-Encountered-in-the-Map">&#182;</a></h2><ul>
-<li>City names have 2 major problems- (elem.attrib['k'] == "addr:city")<ol>
-<li>Using thesaurus in city names ("臺" vs "台", these 2 characters are the same. People use them interchangeably. For the benefit of querying and data processing , I replaced all "臺" with "台")</li>
-<li>Inconsistent city names. Some city name data contain district names or even street names, such as "桃園市樂善里004鄰", "新北市汐止區". Considering all city names in Taiwan are 3 characters long, I wrote a function to check city name data and extract the first 3 characters if the data length is longer than 3 characters.</li>
-</ol>
-</li>
-<li>Different length of postcode - <ol>
-<li>There are 2 kinds of format of Taiwan postcode. 1) 3 numbers 2) 3+2 numbers. For data consistence, I chose to adjust postcode as 3 numbers. </li>
-</ol>
-</li>
+<li>City names have 2 major problems- (elem.attrib['k'] == "addr:city")<br>
+  <strong>Problem 1.</strong>  Using thesaurus in city names ("臺" vs "台", these 2 characters are the same. People use them interchangeably. Take "Taipei city" as an example, "台北市" = "臺北市")<br>
+  <strong>Problem 2.</strong> Inconsistent city names. Some city name data contain district names or even street names, such as "桃園市樂善里004鄰", "新北市汐止區". Considering all city names in Taiwan are 3 characters long, I wrote a function to check city name data and extract the first 3 characters if the data length is longer than 3 characters.</li>
+<li>Different length of postcode -<br>
+  <strong>Probelm 3.</strong> There are 2 kinds of format of Taiwan postcode. 1) 3 numbers 2) 3+2 numbers. For data consistence, I chose to adjust postcode as 3 numbers. </li>
 </ul>
 <hr>
 
@@ -222,7 +218,15 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Using-thesaurus-in-city-names">Using thesaurus in city names<a class="anchor-link" href="#Using-thesaurus-in-city-names">&#182;</a></h2>
+<h2 id="Problem-1-&amp;-2-Using-thesaurus-in-city-names-&amp;-Inconsistent-city-name-format">Problem 1 &amp; 2 Using thesaurus in city names &amp; Inconsistent city name format<a class="anchor-link" href="#Problem-1-&amp;-2-Using-thesaurus-in-city-names-&amp;-Inconsistent-city-name-format">&#182;</a></h2><p>Before cleaning the data, there are some types of city name data.</p>
+<h4 id="Problem-1-Using-thesaurus-in-city-names:-&#33274;-and-&#21488;."><strong>Problem 1</strong> Using thesaurus in city names: &#33274; and &#21488;.<a class="anchor-link" href="#Problem-1-Using-thesaurus-in-city-names:-&#33274;-and-&#21488;.">&#182;</a></h4><p>Examples:<br>
+臺北市<br>
+台北市</p>
+<h4 id="Problem-2-Inconsistent-city-name-format:-it-mixes-city-name-with-district-name.-"><strong>Problem 2</strong> <em>Inconsistent city name format: it mixes city name with district name. </em><a class="anchor-link" href="#Problem-2-Inconsistent-city-name-format:-it-mixes-city-name-with-district-name.-">&#182;</a></h4><p>Examples:<br>
+臺北市北投區<br>
+台北市南港區<br>
+台北市中山區</p>
+
 </div>
 </div>
 </div>
@@ -231,7 +235,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c1"># replaced all &quot;臺&quot; with &quot;台&quot;</span>
+<div class=" highlight hl-ipython2"><pre><span class="c1"># replaced all &quot;臺&quot; with &quot;台&quot; to solve problem 1</span>
 
 <span class="k">def</span> <span class="nf">audit_city_name</span><span class="p">(</span><span class="n">city_value</span><span class="p">):</span>
     <span class="n">old_string</span> <span class="o">=</span> <span class="s1">u&#39;臺&#39;</span>
@@ -250,7 +254,13 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<hr>
+<h4 id="Problem-1-Using-thesaurus-in-city-names:-&#33274;-and-&#21488;.">Problem 1 Using thesaurus in city names: &#33274; and &#21488;.<a class="anchor-link" href="#Problem-1-Using-thesaurus-in-city-names:-&#33274;-and-&#21488;.">&#182;</a></h4><p>Examples: --&gt; problem solved.<br>
+<strong>台</strong>北市<br>
+台北市</p>
+<h4 id="Problem-2-Inconsistent-city-name-format:-it-mixes-city-name-with-district-name.">Problem 2 Inconsistent city name format: it mixes city name with district name.<a class="anchor-link" href="#Problem-2-Inconsistent-city-name-format:-it-mixes-city-name-with-district-name.">&#182;</a></h4><p>Examples:<br>
+<strong>台</strong>北市北投區<br>
+台北市南港區<br>
+台北市中山區</p>
 
 </div>
 </div>
@@ -260,7 +270,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Inconsistent-city-names">Inconsistent city names<a class="anchor-link" href="#Inconsistent-city-names">&#182;</a></h2>
+<hr>
+
 </div>
 </div>
 </div>
@@ -269,7 +280,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c1"># extract the first 3 characters if the city name length is longer than 3 characters</span>
+<div class=" highlight hl-ipython2"><pre><span class="c1"># extract the first 3 characters if the city name length is longer than 3 characters to solve problem 2</span>
 
 <span class="k">def</span> <span class="nf">check_city_name_length</span><span class="p">(</span><span class="n">city_value</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">city_value</span><span class="p">)</span> <span class="o">&gt;</span><span class="mi">3</span><span class="p">:</span>
@@ -288,13 +299,44 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Different-length-of-postcode">Different length of postcode<a class="anchor-link" href="#Different-length-of-postcode">&#182;</a></h2>
+<h4 id="Problem-1-Using-thesaurus-in-city-names:-&#33274;-and-&#21488;.">Problem 1 Using thesaurus in city names: &#33274; and &#21488;.<a class="anchor-link" href="#Problem-1-Using-thesaurus-in-city-names:-&#33274;-and-&#21488;.">&#182;</a></h4><p>Examples: --&gt; problem solved.<br>
+<strong>台</strong>北市<br>
+台北市</p>
+<h4 id="Problem-2-Inconsistent-city-name-format:-it-mixes-city-name-with-district-name.">Problem 2 Inconsistent city name format: it mixes city name with district name.<a class="anchor-link" href="#Problem-2-Inconsistent-city-name-format:-it-mixes-city-name-with-district-name.">&#182;</a></h4><p>Examples:  --&gt; problem solved.<br>
+<strong>台</strong>北市<del>北投區</del><br>
+台北市<del>南港區</del><br>
+台北市<del>中山區</del></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Problem-3.-Different-length-of-postcode">Problem 3. Different length of postcode<a class="anchor-link" href="#Problem-3.-Different-length-of-postcode">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Postcode data examples before data cleaning:</p>
+<ul>
+<li>111  </li>
+<li>25137  </li>
+<li>10066  </li>
+</ul>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="c1"># extract the first 3 characters from original postcode data</span>
@@ -316,6 +358,21 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>Postcode data examples after data cleaning:</p>
+<ul>
+<li>111  </li>
+<li>251  </li>
+<li>100    </li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <hr>
 
 </div>
@@ -326,7 +383,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Data-Overview-and-Additional-Ideas">Data Overview and Additional Ideas<a class="anchor-link" href="#Data-Overview-and-Additional-Ideas">&#182;</a></h2><p>Database queries are used to provide a statistical overview of the dataset.</p>
+<h2 id="Data-Overview">Data Overview<a class="anchor-link" href="#Data-Overview">&#182;</a></h2><p>Database queries are used to provide a statistical overview of the dataset.</p>
 
 </div>
 </div>
@@ -381,7 +438,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>result: 47075</p>
+<p><strong>result:</strong> 47075</p>
 
 </div>
 </div>
@@ -409,7 +466,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>result: 6140</p>
+<p><strong>result:</strong> 6140</p>
 
 </div>
 </div>
@@ -429,8 +486,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <pre><code>sqlite> SELECT COUNT(DISTINCT(e.uid))          
-FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) e;
- </code></pre>
+FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) e;</code></pre>
 </div>
 </div>
 </div>
@@ -439,7 +495,7 @@ FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) e;
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>result: 771</p>
+<p><strong>result:</strong> 771</p>
 
 </div>
 </div>
@@ -467,23 +523,74 @@ FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) e;
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>result: 96</p>
+<p><strong>result:</strong> 96</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre> 
-</pre></div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Top-10-contributing-users">Top 10 contributing users<a class="anchor-link" href="#Top-10-contributing-users">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<pre><code>SELECT e.user, COUNT(*) as num
+FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e
+GROUP BY e.user
+ORDER BY num DESC
+LIMIT 10;</code></pre>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>result:</strong><br>
+Supaplex|12585<br>
+Littlebtc|4976<br>
+愛台玩|3055<br>
+siaoyo|2990<br>
+Vintagejhan|2875<br>
+sushiboy|2385<br>
+assanges|1442<br>
+dongpo|1120<br>
+egret|827<br>
+kcwu|807</p>
 
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Other-Ideas-about-the-datasets">Other Ideas about the datasets<a class="anchor-link" href="#Other-Ideas-about-the-datasets">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>1. Enrich the dataset with district data from city names</strong><br>
+As I addressed in Problem 2, there are a portion of city name data mixing with district name data. From the point of cleaning city name data, I only extracted the first 3 characters from city name data. However, it is possible to save the district name data from city name data (elem.attrib['k'] == "addr:city") and enrich the same node with this extracted district name data.</p>
+<p><strong>2. Creating a live dashboard to show top 10 contributors for the map</strong><br>
+OpenStreetMap is an open source project and everyone could contribute on it. For encouraging more and more people to contribute, showing the top contributors, like player ranking in games, motivates people who already put effort on the dataset. With continous input from the crowd, it benefits the whole OpenStreetMap community.</p>
 
+</div>
+</div>
 </div>
     </div>
   </div>
